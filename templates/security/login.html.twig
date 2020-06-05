@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SecurityController{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; justify-content: center; display: flex; flex-wrap: wrap; }
+    .form_item { margin-top: 20px; width: 200px; display: flex; justify-content: start; flex-wrap: wrap;}
+    .form_item:last-child  { justify-content: center;}
+    h1.title { width: 100%; text-align: center;}
+    button { width: 70px;  height: 40px; justify-self: center;}
+    input { height: 20px; width: 100%;}
+    .form_item>label { text-align: end; }
+    .error { color: red; }
+    span {  width: 100%; text-align: center;}
+</style>
+
+<div class="example-wrapper">
+  <a href="{{ path('logout') }}">Logout</a>
+    <h1 class="title">Login Page</h1>
+  {% if error %}
+    <span class="error">{{ error.messageKey }}</span>
+  {% endif %}
+
+  <form action="{{ path('login') }}" method="post">
+    <div class="form_item">
+      <label for="email">Email</label>
+      <input type="email" name="_username" id="email" value="{{ last_username }}" placeholder="Email here ...">
+    </div>
+
+    <div class="form_item">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="_password" placeholder="Password here ...">
+    </div>
+    <div class="form_item">
+      <button type="submit">Login</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
