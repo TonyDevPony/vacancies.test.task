@@ -16,10 +16,59 @@ class VacancyService implements VacancyServicesInterface
     $this->vacancyRepository = $vacancyRepository;
   }
 
-  public function create(string $title, string $site,
-                         string $address, int $telephone, string $description): Vacancy
+  /**
+   * @param array $orderBy
+   * @param int|null $limit
+   * @param int|null $offset
+   * @return array
+   */
+  public function getAll(array $orderBy = [], int $limit = null, int $offset = null): array
   {
-    $vacancy = new Vacancy($title, $site, $address, $telephone, $description);
+    return $this->vacancyRepository->all([], $orderBy, $limit, $offset);
   }
+
+  /**
+   * @param string $creatorName
+   * @param string $title
+   * @param string $site
+   * @param string $address
+   * @param string $telephone
+   * @param string $description
+   * @return Vacancy
+   */
+  public function create(string $creatorName,
+                         string $title,
+                         string $site,
+                         string $address,
+                         string $telephone,
+                         string $description): Vacancy
+  {
+
+
+    $vacancy = new Vacancy($creatorName,$title, $site, $address, $telephone, $description);
+
+    $this->vacancyRepository->save($vacancy);
+
+    return $vacancy;
+  }
+
+  /**
+   * @param int $id
+   * @return int|null
+   * @throws \Doctrine\ORM\ORMException
+   * @throws \Doctrine\ORM\OptimisticLockException
+   */
+  public function delete(int $id): ?int
+  {
+    $this->vacancyRepository->delete($id);
+
+    return $id;
+  }
+
+
+//  public function update(int $id, array $params): ?Vacancy
+//  {
+//    // TODO: Implement update() method.
+//  }
 
 }
