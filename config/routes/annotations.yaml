@@ -2,6 +2,11 @@ controllers:
     resource: ../../src/Controller/
     type: annotation
 
+#vacancy_ctrl:
+#    resource: ../../src/Controller/Vacancy/
+#    type: annotation
+#    prefix: "/vacancy"
+
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
