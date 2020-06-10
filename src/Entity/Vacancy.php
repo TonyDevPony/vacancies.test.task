@@ -18,9 +18,9 @@ class Vacancy
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=180)
      */
-    private $creatorId;
+    private $creatorName;
 
     /**
     * @ORM\Column(type="string", length=180)
@@ -38,7 +38,7 @@ class Vacancy
     private $address;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $telephone;
 
@@ -54,169 +54,168 @@ class Vacancy
 
 
     /**
-     * @ORM\Column(type="datetime", name="deleted_at")
+     * @ORM\Column(type="datetime", name="deleted_at", nullable=true)
      */
     private $deletedAt;
 
-    public function __construct(string $title, string $site,
-                                string $address, int $telephone, string $description)
+    public function __construct(string $creatorName, string $title, string $site,
+                                string $address, string $telephone, string $description)
     {
-
+      $this->creatorName = $creatorName;
       $this->title = $title;
       $this->site = $site;
       $this->address = $address;
       $this->telephone = $telephone;
       $this->description = $description;
+      $this->createdAt = new \DateTime();
 
     }
 
 
-  public function getId(): ?int
-    {
-        return $this->id;
-    }
+    public function getId(): ?int
+      {
+          return $this->id;
+      }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getCreatorId(): ?int
-    {
-      return $this->creatorId;
-    }
+      public function getCreatorName(): ?string
+      {
+        return $this->creatorName;
+      }
 
     /**
-     * @param mixed $creatorId
+     * @param $creatorName
+     * @return $this
      */
-    public function setCreatorId($creatorId): self
-    {
-      $this->creatorId = $creatorId;
+      public function setCreatorName($creatorName): self
+      {
+        $this->creatorName = $creatorName;
 
-      return $this;
-    }
-    /**
-     * @return string
-     */
-    public function getTitle(): ?string
-    {
-      return $this->title;
-    }
+        return $this;
+      }
+      /**
+       * @return string
+       */
+      public function getTitle(): ?string
+      {
+        return $this->title;
+      }
 
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title): self
-    {
-      $this->title = $title;
+      /**
+       * @param mixed $title
+       * @return $this
+       */
+      public function setTitle($title): self
+      {
+        $this->title = $title;
 
-      return $this;
-    }
+        return $this;
+      }
 
-    /**
-     * @return string
-     */
-    public function getDescription(): ?string
-    {
-      return $this->description;
-    }
-
-    /**
-     * @param mixed $description
-     */
-    public function setDescription($description): self
-    {
-      $this->description = $description;
-
-      return $this;
-    }
+      /**
+       * @return string
+       */
+      public function getDescription(): ?string
+      {
+        return $this->description;
+      }
 
     /**
-     * @return mixed
+     * @param $description
+     * @return $this
      */
-    public function getCreatedAt()
-    {
-      return $this->createdAt;
-    }
+      public function setDescription($description): self
+      {
+        $this->description = $description;
 
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): self
-    {
-      $this->createdAt = $createdAt;
+        return $this;
+      }
 
-      return $this;
-    }
+      /**
+       * @return mixed
+       */
+      public function getCreatedAt()
+      {
+        return $this->createdAt;
+      }
 
-    /**
-     * @return mixed
-     */
-    public function getDeletedAt()
-    {
-      return $this->deletedAt;
-    }
 
-    /**
-     * @param mixed $deletedAt
-     */
-    public function setDeletedAt($deletedAt): self
-    {
-      $this->deletedAt = $deletedAt;
+      /**
+       * @return mixed
+       */
+      public function getDeletedAt()
+      {
+        return $this->deletedAt;
+      }
 
-      return $this;
-    }
+      /**
+       * @param mixed $deletedAt
+       * @return $this
+       */
+      public function setDeletedAt($deletedAt): self
+      {
+        $this->deletedAt = $deletedAt;
 
-    /**
-     * @return string
-     */
-    public function getSite(): ?string
-    {
-      return $this->site;
-    }
+        return $this;
+      }
 
-    /**
-     * @param mixed $site
-     */
-    public function setSite($site): self
-    {
-      $this->site = $site;
+      /**
+       * @return string
+       */
+      public function getSite(): ?string
+      {
+        return $this->site;
+      }
 
-      return $this;
-    }
+      /**
+       * @param mixed $site
+       * @return $this
+       */
+      public function setSite($site): self
+      {
+        $this->site = $site;
 
-    /**
-     * @return string
-     */
-    public function getAddress(): ?string
-    {
-      return $this->address;
-    }
+        return $this;
+      }
 
-    /**
-     * @param mixed $address
-     */
-    public function setAddress($address): self
-    {
-      $this->address = $address;
+      /**
+       * @return string
+       */
+      public function getAddress(): ?string
+      {
+        return $this->address;
+      }
 
-      return $this;
-    }
+      /**
+       * @param mixed $address
+       * @return $this
+       */
+      public function setAddress($address): self
+      {
+        $this->address = $address;
 
-    /**
-     * @return integer
-     */
-    public function getTelephone(): ?int
-    {
-      return $this->telephone;
-    }
+        return $this;
+      }
 
-    /**
-     * @param mixed $telephone
-     */
-    public function setTelephone($telephone): self
-    {
-      $this->telephone = $telephone;
+      /**
+       * @return integer
+       */
+      public function getTelephone(): ?string
+      {
+        return $this->telephone;
+      }
 
-      return $this;
-    }
+      /**
+       * @param mixed $telephone
+       * @return $this
+       */
+      public function setTelephone($telephone): self
+      {
+        $this->telephone = $telephone;
+
+        return $this;
+      }
 
 }
