@@ -9,6 +9,15 @@ use App\Entity\Vacancy;
 interface VacancyServicesInterface
 {
   /**
+   * @param array $orderBy
+   * @param int|null $limit
+   * @param int $offset
+   * @return array
+   */
+  public function getAll(array $orderBy = [], int $limit = null, int $offset = null): array;
+
+  /**
+   * @param string $creatorName
    * @param string $title
    * @param string $site
    * @param string $address
@@ -16,7 +25,15 @@ interface VacancyServicesInterface
    * @param string $description
    * @return Vacancy
    */
-  public function create(string $title, string $site,
-                         string $address, int $telephone, string $description): Vacancy;
+  public function create(string $creatorName, string $title, string $site,
+                         string $address, string $telephone, string $description): Vacancy;
+
+  /**
+   * @param int $id
+   * @return int|null
+   */
+  public function delete(int $id): ?int;
+
+  // public function update(int $id, array $params): ?Vacancy;
 
 }
