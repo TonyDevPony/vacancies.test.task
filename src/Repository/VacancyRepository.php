@@ -25,12 +25,23 @@ class VacancyRepository extends ServiceEntityRepository
 
     }
 
-    /**
-     * @return Vacancy[]
-     */
-    public function all(): array
+  /**
+   * @param array $criteria
+   * @param array|null $orderBy
+   * @param null $offset
+   * @param int $limit
+   * @return Vacancy[]
+   */
+    public function all(array $criteria = [], array $orderBy = null, $offset = null, $limit = 10): array
     {
-      $vacancies = parent::findAll();
+      if($orderBy == null) {
+        $orderBy['id'] = 'DESC';
+      }
+
+      /**
+       * @var Vacancy[] $vacancies
+       */
+      $vacancies = parent::findBy($criteria, $orderBy, $offset, $limit);
 
       return $vacancies;
     }
@@ -45,6 +56,11 @@ class VacancyRepository extends ServiceEntityRepository
        * @var Vacancy $vacancy
        */
       $vacancy = parent::findOneBy(['id' => $id]);
+      if(!$vacancy) {
+        throw new \LogicException(
+          'No vacancy found for id '.$id
+        );
+      }
 
       return $vacancy;
     }
@@ -72,6 +88,28 @@ class VacancyRepository extends ServiceEntityRepository
       $this->manager->flush();
 
       return $vacancy;
+    }
+
+  /**
+   * @param int $id
+   * @return int|null
+   * @throws \Doctrine\ORM\ORMException
+   * @throws \Doctrine\ORM\OptimisticLockException
+   */
+    public function delete(int $id): ?int
+    {
+      $em = $this->getEntityManager();
+      $vacancy = $em->getRepository(Vacancy::class)->find($id);
+
+      if(!$vacancy) {
+        throw new \LogicException(
+          'No vacancy found for id '.$id
+        );
+      }
+      $em->remove($vacancy);
+      $em->flush();
+
+      return $id;
     }
 
 }
