@@ -25,9 +25,6 @@ class VacancyController extends AbstractController
    */
     public function index(Request $request)
     {
-
-        $vacancyTitle = $request->query->get('vacancyTittle') ?? null;
-
         $order = $request->query->get('order') ?? 'DESC';
         $limit = $request->query->get('limit') ?? 10;
         $offset = $request->query->get('offset') ?? 0;
@@ -35,11 +32,8 @@ class VacancyController extends AbstractController
 
 
         $vacancies = $this->vacancyService->getAll(['id' => $order], $limit, $offset);
-
         return $this->render('vacancy/index.html.twig', [
           'vacancies' => $vacancies,
-          'vacancyTitle' => $vacancyTitle,
-          'controller_name' => 'Vacancy Controller'
         ]);
     }
 
@@ -58,14 +52,13 @@ class VacancyController extends AbstractController
   /**
    * @Route("/create", methods={"POST"})
    * @param Request $request
-   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    */
     public function create(Request $request)
     {
       $requestData = $request->request->all();
 
       $userName = $this->getUser()->getUsername();
-      //$userName = "admin@gmail.com";
 
 
       $vacancy = $this->vacancyService->create(
@@ -77,22 +70,49 @@ class VacancyController extends AbstractController
         $requestData["description"]
       );
 
-      $params = $this->json($vacancy);
-
-      return $this->redirectToRoute('index', array('vacancyTittle' => $vacancy->getTitle()));
+      return $this->redirectToRoute('index');
     }
-
 
   /**
    * @Route("/delete/{id}", methods={"POST"})
    * @param int $id
-   * @return JsonResponse
-   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    */
-    public function delete(int $id): JsonResponse
+    public function delete(int $id)
     {
       $deletedId = $this->vacancyService->delete($id);
 
-      return $this->json(['deletedId' => $deletedId]);
+      return $this->redirectToRoute('index');
+    }
+
+  /**
+   * @Route("/update/show/{id}", methods={"GET"})
+   * @param int $id
+   * @return \Symfony\Component\HttpFoundation\Response
+   */
+    public function updateShow(int $id)
+    {
+      $vacancy = $this->vacancyService->getOne($id);
+
+      return $this->render('vacancy/showUpdate.html.twig', [
+        'vacancy' => $vacancy
+      ]);
+    }
+
+  /**
+   * @Route("/update/{id}", methods={"POST"})
+   * @param int $id
+   * @param Request $request
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   */
+    public function update(int $id, Request $request)
+    {
+      $requestData = $request->request->all();
+
+      $this->vacancyService->update($id, $requestData['title'],
+                                    $requestData['site'], $requestData['address'],
+                                    $requestData['telephone'], $requestData['description']);
+
+      return $this->redirectToRoute('index');
     }
 }
