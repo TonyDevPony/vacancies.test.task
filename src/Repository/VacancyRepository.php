@@ -79,15 +79,13 @@ class VacancyRepository extends ServiceEntityRepository
 
     /**
      * @param Vacancy $vacancy
-     * @return Vacancy
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function update(Vacancy $vacancy): Vacancy
+    public function update()
     {
       $this->manager->flush();
 
-      return $vacancy;
     }
 
   /**
