@@ -16,6 +16,8 @@ class VacancyService implements VacancyServicesInterface
     $this->vacancyRepository = $vacancyRepository;
   }
 
+
+
   /**
    * @param array $orderBy
    * @param int|null $limit
@@ -25,6 +27,20 @@ class VacancyService implements VacancyServicesInterface
   public function getAll(array $orderBy = [], int $limit = null, int $offset = null): array
   {
     return $this->vacancyRepository->all([], $orderBy, $limit, $offset);
+  }
+
+  /**
+   * @param int $id
+   * @return Vacancy
+   */
+  public function getOne(int $id): Vacancy
+  {
+    /**
+     * @var Vacancy $vacancy
+     */
+    $vacancy = $this->vacancyRepository->one($id);
+
+    return $vacancy;
   }
 
   /**
@@ -66,9 +82,37 @@ class VacancyService implements VacancyServicesInterface
   }
 
 
-//  public function update(int $id, array $params): ?Vacancy
-//  {
-//    // TODO: Implement update() method.
-//  }
+  public function update(int $id, string $title = '',
+                         string $site  = '', string $address  = '',
+                         string $telephone  = '', string $description  = ''): ?Vacancy
+  {
+    $vacancy = $this->vacancyRepository->find($id);
+
+    if(!$vacancy) {
+      throw new \LogicException(
+        'No vacancy found for id' .$id
+      );
+    }
+
+    if($title != '')
+      $vacancy->setTitle($title);
+
+    if($site != '')
+      $vacancy->setSite($site);
+
+    if($address != '')
+      $vacancy->setAddress($address);
+
+    if($telephone != '')
+      $vacancy->setTelephone($telephone);
+
+    if($description != '')
+      $vacancy->setDescription($description);
+
+    $this->vacancyRepository->update();
+
+    return $vacancy;
+
+  }
 
 }
