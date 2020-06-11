@@ -53,11 +53,6 @@ class Vacancy
     private $createdAt;
 
 
-    /**
-     * @ORM\Column(type="datetime", name="deleted_at", nullable=true)
-     */
-    private $deletedAt;
-
     public function __construct(string $creatorName, string $title, string $site,
                                 string $address, string $telephone, string $description)
     {
@@ -139,26 +134,6 @@ class Vacancy
       public function getCreatedAt()
       {
         return $this->createdAt;
-      }
-
-
-      /**
-       * @return mixed
-       */
-      public function getDeletedAt()
-      {
-        return $this->deletedAt;
-      }
-
-      /**
-       * @param mixed $deletedAt
-       * @return $this
-       */
-      public function setDeletedAt($deletedAt): self
-      {
-        $this->deletedAt = $deletedAt;
-
-        return $this;
       }
 
       /**
