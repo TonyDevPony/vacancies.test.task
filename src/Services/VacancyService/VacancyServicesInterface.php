@@ -1,11 +1,14 @@
 <?php
 
 
-namespace App\Services;
+namespace App\Services\VacancyService;
 
 use App\Entity\Vacancy;
 
-
+/**
+ * Interface VacancyServicesInterface
+ * @package App\Services
+ */
 interface VacancyServicesInterface
 {
   /**
