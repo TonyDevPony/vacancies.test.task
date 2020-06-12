@@ -3,7 +3,7 @@
 namespace App\Controller\Vacancy;
 
 use App\Entity\Vacancy;
-use App\Services\VacancyServicesInterface;
+use App\Services\VacancyService\VacancyServicesInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
