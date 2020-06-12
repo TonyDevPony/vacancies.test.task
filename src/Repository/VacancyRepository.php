@@ -13,7 +13,7 @@ use Doctrine\Persistence\ObjectManager;
  * @method Vacancy[]    findAll()
  * @method Vacancy[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VacancyRepository extends ServiceEntityRepository
+class VacancyRepository extends ServiceEntityRepository implements BaseRepositoryInterface
 {
     private $manager;
 
@@ -85,7 +85,6 @@ class VacancyRepository extends ServiceEntityRepository
     public function update()
     {
       $this->manager->flush();
-
     }
 
   /**
@@ -96,16 +95,16 @@ class VacancyRepository extends ServiceEntityRepository
    */
     public function delete(int $id): ?int
     {
-      $em = $this->getEntityManager();
-      $vacancy = $em->getRepository(Vacancy::class)->find($id);
+
+      $vacancy = $this->manager->getRepository(Vacancy::class)->find($id);
 
       if(!$vacancy) {
         throw new \LogicException(
           'No vacancy found for id '.$id
         );
       }
-      $em->remove($vacancy);
-      $em->flush();
+      $this->manager->remove($vacancy);
+      $this->manager->flush();
 
       return $id;
     }
