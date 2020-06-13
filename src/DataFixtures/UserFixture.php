@@ -20,6 +20,16 @@ class UserFixture extends Fixture
     {
         $user = new User();
 
+        $user->setEmail('kirildemchenko07@gmail.com');
+        $user->setPassword(
+          $this->encoder->encodePassword($user, 'kiril')
+        );
+
+        $manager->persist($user);
+        $manager->flush();
+
+        $user = new User();
+
         $user->setEmail('admin@gmail.com');
         $user->setPassword(
           $this->encoder->encodePassword($user, 'admin')
