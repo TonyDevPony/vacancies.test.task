@@ -8,14 +8,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\UserRepository;
 
 class VacancyController extends AbstractController
 {
     private $vacancyService;
 
-    public function __construct(VacancyServicesInterface $vacancyServices)
+    private $userRepository;
+
+    public function __construct(VacancyServicesInterface $vacancyServices, UserRepository $userRepository)
     {
       $this->vacancyService = $vacancyServices;
+      $this->userRepository = $userRepository;
     }
 
   /**
@@ -29,16 +33,49 @@ class VacancyController extends AbstractController
         $limit = $request->query->get('limit') ?? 10;
         $offset = $request->query->get('offset') ?? 0;
 
+        $userName = $this->getUser()->getUsername();
 
 
-        $vacancies = $this->vacancyService->getAll(['id' => $order], $limit, $offset);
+
+        $vacancies = $this->vacancyService->getAll([], ['id' => $order],$limit, $offset);
         return $this->render('vacancy/index.html.twig', [
           'vacancies' => $vacancies,
+          'userName'  => $userName
         ]);
     }
 
+    /**
+     * @Route("/show/{id}", name="showVacancy", methods={"GET"})
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function show(int $id)
+    {
+      $vacancy = $this->vacancyService->getOne($id);
+
+      return $this->render('vacancy/vacancyShow.html.twig', [
+        'vacancy' => $vacancy
+      ]);
+    }
+
+    /**
+     * @Route("/vacancy/list/user/", name="vacanciesUser", methods={"GET"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showVacancyForUser()
+    {
+      $userLogin = $this->getUser()->getUsername();
+
+      $vacancyList = $this->vacancyService->getAll(['creatorName' => $userLogin]);
+
+      return $this->render('vacancy/listUserVacancy.html.twig', [
+        'vacancies'      => $vacancyList,
+      ]);
+    }
+
   /**
-   * @Route("/create/show", methods={"GET"})
+   * @Route("/create/show", name="createVacancy",methods={"GET"})
    * @param Request $request
    * @return \Symfony\Component\HttpFoundation\Response
    */
@@ -115,4 +152,6 @@ class VacancyController extends AbstractController
 
       return $this->redirectToRoute('index');
     }
+
+
 }
