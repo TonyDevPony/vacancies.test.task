@@ -5,6 +5,7 @@ namespace App\Services\ResumeService;
 
 use App\Entity\Resume;
 use App\Repository\ResumeRepository;
+use Symfony\Component\Validator\Constraints\Date;
 
 class ResumeService implements ResumeServiceInterface
 {
@@ -17,14 +18,15 @@ class ResumeService implements ResumeServiceInterface
   }
 
   /**
+   * @param array $criteria
    * @param array $orderBy
    * @param int|null $limit
    * @param int|null $offset
    * @return array
    */
-  public function getAll(array $orderBy = [], int $limit = null, int $offset = null): array
+  public function getAll(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): array
   {
-    // TODO: Implement getAll() method.
+    return $this->resumeRepository->all($criteria, $orderBy, $limit,$offset);
   }
 
 
@@ -36,31 +38,71 @@ class ResumeService implements ResumeServiceInterface
    */
   public function create(int $creatorId, string $positionTitle, string $resumeText): ?Resume
   {
-    // TODO: Implement create() method.
+    $resume = new Resume($creatorId, $positionTitle, $resumeText);
+
+    $this->resumeRepository->save($resume);
+
+    return $resume;
   }
 
   /**
    * @param int $id
    * @return Resume
    */
-  public function one(int $id): Resume
+  public function getOne(int $id): Resume
   {
-    // TODO: Implement one() method.
+    return $this->resumeRepository->one($id);
   }
 
-  public function send(Resume $resume)
+  public function update(int $id, int $creatorId = null, string $positionTitle = '', $resumeText = '')
   {
-    // TODO: Implement send() method.
+    $resume = $this->resumeRepository->find($id);
+
+    if(!$resume)
+    {
+      throw new \LogicException(
+        'No resume found for id' .$id
+      );
+    }
+
+    if($creatorId)
+      $resume->setCreatorId($creatorId);
+
+    if($positionTitle != '')
+      $resume->setPositionTitle($positionTitle);
+
+    if($resumeText != '')
+      $resume->setResumeText($resumeText);
+
+
+    $resume->setUpdatedAt(new \DateTime());
+    $this->resumeRepository->update();
+
+    return $resume;
   }
 
-  public function approve(int $id)
+  /**
+   * @param int $id
+   * @return mixed|void
+   */
+  public function delete(int $id)
   {
-    // TODO: Implement approve() method.
+    $this->resumeRepository->delete($id);
   }
 
-  public function reject(int $id)
-  {
-    // TODO: Implement reject() method.
-  }
+//  public function send(Resume $resume)
+//  {
+//    // TODO: Implement send() method.
+//  }
+//
+//  public function approve(int $id)
+//  {
+//    // TODO: Implement approve() method.
+//  }
+//
+//  public function reject(int $id)
+//  {
+//    // TODO: Implement reject() method.
+//  }
 
 }
