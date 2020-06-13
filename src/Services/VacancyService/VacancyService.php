@@ -17,16 +17,16 @@ class VacancyService implements VacancyServicesInterface
   }
 
 
-
   /**
+   * @param array $criteria
    * @param array $orderBy
    * @param int|null $limit
    * @param int|null $offset
    * @return array
    */
-  public function getAll(array $orderBy = [], int $limit = null, int $offset = null): array
+  public function getAll(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): array
   {
-    return $this->vacancyRepository->all([], $orderBy, $limit, $offset);
+    return $this->vacancyRepository->all($criteria, $orderBy, $limit, $offset);
   }
 
   /**
@@ -35,12 +35,7 @@ class VacancyService implements VacancyServicesInterface
    */
   public function getOne(int $id): Vacancy
   {
-    /**
-     * @var Vacancy $vacancy
-     */
-    $vacancy = $this->vacancyRepository->one($id);
-
-    return $vacancy;
+    return $this->vacancyRepository->one($id);
   }
 
   /**

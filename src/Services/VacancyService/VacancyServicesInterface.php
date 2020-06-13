@@ -12,12 +12,13 @@ use App\Entity\Vacancy;
 interface VacancyServicesInterface
 {
   /**
+   * @param array $criteria
    * @param array $orderBy
    * @param int|null $limit
-   * @param int $offset
+   * @param int|null $offset
    * @return array
    */
-  public function getAll(array $orderBy = [], int $limit = null, int $offset = null): array;
+  public function getAll(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): array;
 
   /**
    * @param int $id
