@@ -42,7 +42,15 @@ class Resume
      */
     private $updatedAt;
 
-    /**
+    public function __construct(int $creatorId, string $positionTitle, string $resumeText)
+    {
+      $this->creatorId = $creatorId;
+      $this->positionTitle = $positionTitle;
+      $this->resumeText = $resumeText;
+      $this->createdAt = new \DateTime();
+    }
+
+  /**
      * @return int|null
      */
     public function getResumeId(): ?int
@@ -119,9 +127,9 @@ class Resume
     }
 
     /**
-     * @return int|null
+     * @return \DateTime
      */
-    public function getCreatedAt(): ?int
+    public function getCreatedAt()
     {
       return $this->createdAt;
     }
