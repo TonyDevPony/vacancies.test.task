@@ -9,20 +9,20 @@
     h2 { width: 100%; text-align: center;}
     .wrapper { display: flex; justify-content: center; flex-wrap: wrap;}
     .create_form { width: 200px; display: flex; flex-wrap: wrap; justify-content: center;}
-    .logout_button { display: flex; text-decoration: none; border: 1px solid black; color: black; width: 90px; height: 40px; text-align: center; justify-content: center; align-items: center}
     button[type="submit"] { margin-top: 20px; width: 90px;  height: 40px; font-size: 13pt; border-radius: 10px; }
     input { width: 100%; height: 20px;}
     .create_form_item { margin-top: 10px;}
     .cancel_button { margin-right: 40px; text-decoration: none; color: black;}
+    .header { display: flex; justify-content: flex-end; width: 100%;}
+    .custom_button { margin-left:15px; display: flex; text-decoration: none; border: 1px solid black; color: black; padding: 3px 10px 3px 10px; height: 40px; text-align: center; justify-content: center; align-items: center; }
 </style>
 
 
 
-  <div class="header">
-    <a href="{{ path('logout') }}" class="logout_button">Logout</a>
-  </div>
   <div class="wrapper">
-
+    <div class="header">
+      <a href="{{ path('logout') }}" class="custom_button">Logout</a>
+    </div>
     <h2>ShowCreate</h2>
 
     <form action="/update/{{ vacancy.id }}" method="post" class="create_form">
@@ -52,7 +52,7 @@
       </div>
 
       <div class="create_form_item">
-        <a href="/" class="cancel_button">Cancel</a>
+        <a href="{{ path('vacanciesUser') }}" class="cancel_button">Cancel</a>
         <button type="submit">Submit</button>
       </div>
 
