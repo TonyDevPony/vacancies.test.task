@@ -55,7 +55,7 @@ class ResumeRepository extends ServiceEntityRepository implements BaseRepository
       /**
        * @var Resume $resume
        */
-      $resume = parent::findOneBy(['id' => $id]);
+      $resume = parent::findOneBy(['resumeId' => $id]);
 
       if(!$resume)
       {
