@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ResumeController!{% endblock %}
+
+{% block body %}
+<style>
+    .wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif;}
+    .wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .header { display: flex; justify-content: flex-end; }
+    .custom_button { margin-left:15px; display: flex; text-decoration: none; border: 1px solid black; color: black; padding: 3px 10px 3px 10px; height: 40px; text-align: center; justify-content: center; align-items: center}
+    .button { display: flex; justify-content: center; margin-top: 20px;}
+    .vacancy_info { border-top: 1px dotted #707070; border-bottom: 1px dotted #707070; margin-top: 20px;}
+
+</style>
+
+<div class="wrapper">
+    <div class="header">
+      <a href="{{ path('logout') }}" class="custom_button">Logout</a>
+      <a href="{{ path('vacanciesUser') }}" class="custom_button">My vacancies list</a>
+    </div>
+
+    <div class="vacancy_info">
+      <div class="vacancy_title">
+        <h3>Title: {{ vacancy.title }}</h3>
+        <p>Site: {{ vacancy.site }}</p>
+        <p>Address: {{ vacancy.address }}</p>
+        <p>CreatedAt: {{ vacancy.createdAt.format('D.M.Y h:m:s') }}</p>
+      </div>
+      <div class="vacancy_body">
+        <h4>Description:</h4>
+        <p>{{ vacancy.description }}</p>
+      </div>
+    </div>
+    <div class="button">
+      <a href="">Send resume</a>
+    </div>
+</div>
+{% endblock %}
