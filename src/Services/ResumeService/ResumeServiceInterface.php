@@ -7,19 +7,24 @@ use App\Entity\Resume;
 interface ResumeServiceInterface
 {
   /**
+   * @param array $criteria
    * @param array $orderBy
    * @param int|null $limit
    * @param int|null $offset
-   * @return mixed
+   * @return array
    */
-  public function getAll(array $orderBy = [], int $limit = null, int $offset = null): array ;
+  public function getAll(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): array ;
 
   /**
    * @param int $id
    * @return Resume
    */
-  public function one(int $id): Resume;
+  public function getOne(int $id): Resume;
 
+  /**
+   * @param string $userLogin
+   * @return int|null
+   */
   /**
    * @param int $creatorId
    * @param string $positionTitle
@@ -29,13 +34,23 @@ interface ResumeServiceInterface
   public function create(int $creatorId, string $positionTitle, string $resumeText): ?Resume;
 
   /**
-   * @param Resume $resume
+   * @param int $id
+   * @param int $creatorId
+   * @param string $positionTitle
+   * @param $resumeText
    * @return mixed
    */
-  public function send(Resume $resume);
+  public function update(int $id, int $creatorId = null, string $positionTitle = '', $resumeText = '');
 
-  public function approve(int $id);
+  /**
+   * @param int $id
+   * @return mixed
+   */
+  public function delete(int $id);
+//  public function send(Resume $resume);
 
-  public function reject(int $id);
+//  public function approve(int $id);
+//
+//  public function reject(int $id);
 
 }
