@@ -16,15 +16,11 @@ interface ResumeServiceInterface
   public function getAll(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): array ;
 
   /**
-   * @param int $id
+   * @param array $criteria
    * @return Resume
    */
-  public function getOne(int $id): Resume;
+  public function getOne(array $criteria = []): Resume;
 
-  /**
-   * @param string $userLogin
-   * @return int|null
-   */
   /**
    * @param int $creatorId
    * @param string $positionTitle
@@ -47,10 +43,24 @@ interface ResumeServiceInterface
    * @return mixed
    */
   public function delete(int $id);
-//  public function send(Resume $resume);
 
-//  public function approve(int $id);
-//
-//  public function reject(int $id);
+  /**
+   * @param int $vacancyId
+   * @param int $resumeId
+   * @return mixed|void
+   */
+  public function send(int $vacancyId, int $resumeId);
+
+  /**
+   * @param int $id
+   * @return mixed
+   */
+  public function approve(int $id);
+
+  /**
+   * @param int $id
+   * @return mixed
+   */
+  public function reject(int $id);
 
 }

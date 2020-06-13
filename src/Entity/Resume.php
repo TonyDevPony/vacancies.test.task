@@ -42,12 +42,18 @@ class Resume
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $isSend;
+
     public function __construct(int $creatorId, string $positionTitle, string $resumeText)
     {
       $this->creatorId = $creatorId;
       $this->positionTitle = $positionTitle;
       $this->resumeText = $resumeText;
       $this->createdAt = new \DateTime();
+      $this->isSend = 0;
     }
 
   /**
@@ -159,6 +165,22 @@ class Resume
     public function setUpdatedAt($updatedAt): void
     {
       $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsSend(): int
+    {
+      return $this->isSend;
+    }
+
+    /**
+     * @param int $isSend
+     */
+    public function setIsSend(int $isSend): void
+    {
+      $this->isSend = $isSend;
     }
 
 }

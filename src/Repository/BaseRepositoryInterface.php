@@ -18,10 +18,10 @@ interface BaseRepositoryInterface
   public function all(array $criteria = [], array $orderBy = null, $offset = null, $limit = 10): array;
 
   /**
-   * @param int $id
+   * @param array $criteria
    * @return mixed
    */
-  public function one(int $id);
+  public function one(array $criteria = []);
 
   /**
    * @return mixed

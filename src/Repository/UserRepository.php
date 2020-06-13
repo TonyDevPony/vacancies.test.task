@@ -54,4 +54,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
       return $userId->getId();
     }
 
+    public function getUser(int $id)
+    {
+      /**
+       * @var User $user
+       */
+      $user = parent::findOneBy(['id' => $id]);
+
+      return $user;
+
+    }
+
 }

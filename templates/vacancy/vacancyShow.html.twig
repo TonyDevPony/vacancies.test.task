@@ -8,15 +8,21 @@
     .wrapper code { background: #F5F5F5; padding: 2px 6px; }
     .header { display: flex; justify-content: flex-end; }
     .custom_button { margin-left:15px; display: flex; text-decoration: none; border: 1px solid black; color: black; padding: 3px 10px 3px 10px; height: 40px; text-align: center; justify-content: center; align-items: center}
-    .button { display: flex; justify-content: center; margin-top: 20px;}
     .vacancy_info { border-top: 1px dotted #707070; border-bottom: 1px dotted #707070; margin-top: 20px;}
-
+    .resume_card { margin-top: 20px; box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.16); border-radius: 10px; }
+    h3, p { margin: 0; }
+    .resume_card { display: flex;}
+    .resume_card_title, .resume_card_body, .resume_card_buttons { width: 33.33%;}
+    .resume_card_title { display: flex; justify-content: center; align-items: center;}
+    .resume_card_body_item { text-align: center; }
+    .small_text { font-size: 10pt; display: flex; }
+    .resume_card_buttons { display: flex; justify-content: space-around; align-items: center; }
 </style>
 
 <div class="wrapper">
     <div class="header">
       <a href="{{ path('logout') }}" class="custom_button">Logout</a>
-      <a href="{{ path('vacanciesUser') }}" class="custom_button">My vacancies list</a>
+      <a href="/" class="custom_button">Vacancies list</a>
     </div>
 
     <div class="vacancy_info">
@@ -31,8 +37,73 @@
         <p>{{ vacancy.description }}</p>
       </div>
     </div>
-    <div class="button">
-      <a href="">Send resume</a>
-    </div>
+
+    {% if  userLogin != vacancy.creatorName %}
+      <h2>My resume list</h2>
+        {% for resumeItem in resumeList %}
+          <div class="resume_card">
+            <div class="resume_card_title">
+              <h3>{{ resumeItem.positionTitle }}</h3>
+            </div>
+            <div class="resume_card_body">
+              <div class="resume_card_body_item">
+                    <span class="small_text">
+                      createdAt:
+                      {{ resumeItem.createdAt.format('Y-m-d h:i:s')}}
+                    </span>
+                <span class="small_text">
+                      {% if resumeItem.updatedAt %}
+                        updatedAt:
+                        {{ resumeItem.updatedAt.format('Y-m-d h:i:s') }}
+                      {% endif %}
+                    </span>
+              </div>
+            </div>
+            <div class="resume_card_buttons">
+              <div class="resume_card_buttons_item">
+                <form action="{{ path('resumeSend', {resumeId: resumeItem.resumeId, vacancyId: vacancy.id}) }}" method="POST">
+                  <button type="submit">Send</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    {% else %}
+        {% if pendingResumeList == null %}
+          <h2>No sent resumes</h2>
+        {% else %}
+          <h2>Sent resumes</h2>
+        {% endif %}
+        {% for item in pendingResumeList %}
+          <div class="resume_card">
+            <div class="resume_card_title">
+              <h3>{{ item.positionTitle }}</h3>
+            </div>
+            <div class="resume_card_body">
+              <div class="resume_card_body_item">
+                    <span class="small_text">
+                      createdAt:
+                      {{ item.createdAt.format('Y-m-d h:i:s')}}
+                    </span>
+              </div>
+            </div>
+            <div class="resume_card_buttons">
+              <div class="resume_card_buttons_item">
+                <form action="{{ path('resumeApprove', { resumeId: item.resumeId, vacancyId: vacancy.id }) }}" method="POST">
+                  <button type="submit">Approve</button>
+                </form>
+              </div>
+              <div class="resume_card_buttons_item">
+                <form action="{{ path('resumeReject', { resumeId: item.resumeId, vacancyId: vacancy.id }) }}" method="POST">
+                  <button type="submit">Reject</button>
+                </form>
+              </div>
+              <div class="resume_card_buttons_item">
+                <a href="{{ path('resumeShow', {id: item.resumeId }) }}"><i class="fas fa-eye"></i></a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}

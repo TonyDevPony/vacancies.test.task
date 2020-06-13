@@ -4,7 +4,11 @@ namespace App\Services\ResumeService;
 
 
 use App\Entity\Resume;
+use App\Entity\ResumeStatus;
+use App\Entity\User;
 use App\Repository\ResumeRepository;
+use App\Repository\ResumeStatusRepository;
+use App\Services\ResumeStatusService\ResumeStatusService;
 use Symfony\Component\Validator\Constraints\Date;
 
 class ResumeService implements ResumeServiceInterface
@@ -12,9 +16,14 @@ class ResumeService implements ResumeServiceInterface
 
   private $resumeRepository;
 
-  public function __construct(ResumeRepository $resumeRepository)
+  private $resumeStatusService;
+
+
+
+  public function __construct(ResumeRepository $resumeRepository, ResumeStatusService $resumeStatusService)
   {
     $this->resumeRepository = $resumeRepository;
+    $this->resumeStatusService = $resumeStatusService;
   }
 
   /**
@@ -46,12 +55,12 @@ class ResumeService implements ResumeServiceInterface
   }
 
   /**
-   * @param int $id
+   * @param array $criteria
    * @return Resume
    */
-  public function getOne(int $id): Resume
+  public function getOne(array $criteria = []): Resume
   {
-    return $this->resumeRepository->one($id);
+    return $this->resumeRepository->one($criteria);
   }
 
   public function update(int $id, int $creatorId = null, string $positionTitle = '', $resumeText = '')
@@ -90,19 +99,35 @@ class ResumeService implements ResumeServiceInterface
     $this->resumeRepository->delete($id);
   }
 
-//  public function send(Resume $resume)
-//  {
-//    // TODO: Implement send() method.
-//  }
-//
-//  public function approve(int $id)
-//  {
-//    // TODO: Implement approve() method.
-//  }
-//
-//  public function reject(int $id)
-//  {
-//    // TODO: Implement reject() method.
-//  }
+  /**
+   * @param int $vacancyId
+   * @param int $resumeId
+   * @return mixed|void
+   */
+  public function send(int $vacancyId, int $resumeId)
+  {
+    $this->resumeStatusService->create($vacancyId, $resumeId);
+    $resume = $this->resumeRepository->one(['resumeId' => $resumeId]);
+    $resume->setIsSend(1);
+    $this->resumeRepository->update();
+  }
+
+  /**
+   * @param int $id
+   * @return mixed|void
+   */
+  public function approve(int $id)
+  {
+    $this->resumeStatusService->update($id, 1);
+  }
+
+  /**
+   * @param int $id
+   * @return mixed|void
+   */
+  public function reject(int $id)
+  {
+    $this->resumeStatusService->update($id, 2);
+  }
 
 }

@@ -2,9 +2,12 @@
 
 namespace App\Controller\Resume;
 
+use App\Entity\Resume;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\ResumeService\ResumeService;
+use App\Services\ResumeStatusService\ResumeStatusService;
+use App\Services\VacancyService\VacancyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,11 +18,18 @@ class ResumeController extends AbstractController
 
     private $userRepository;
 
+    private $resumeStatusService;
 
-    public function __construct(ResumeService $resumeService, UserRepository $userRepository)
+    private $vacancyService;
+
+
+    public function __construct(ResumeService $resumeService, UserRepository $userRepository,
+                                ResumeStatusService $resumeStatusService, VacancyService $vacancyService)
     {
       $this->resumeService = $resumeService;
       $this->userRepository = $userRepository;
+      $this->resumeStatusService = $resumeStatusService;
+      $this->vacancyService = $vacancyService;
     }
 
   /**
@@ -78,7 +88,7 @@ class ResumeController extends AbstractController
      */
     public function showUpdate(int $id, Request $request)
     {
-      $resume = $this->resumeService->getOne($id);
+      $resume = $this->resumeService->getOne(['resumeId' => $id]);
 
       return $this->render('resume/showUpdate.html.twig', [
         'resume' => $resume
@@ -122,13 +132,52 @@ class ResumeController extends AbstractController
    */
     public function show(int $id)
     {
-      $resume = $this->resumeService->getOne($id);
+      $resume = $this->resumeService->getOne(['resumeId' => $id]);
 
       return $this->render('resume/resumeShow.html.twig', [
         'resume' => $resume
       ]);
     }
 
+  /**
+   * @Route("resume/send/{resumeId}/{vacancyId}", name="resumeSend", methods={"POST"})
+   * @param int $resumeId
+   * @param int $vacancyId
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   */
+    public function sendResume(int $resumeId, int $vacancyId)
+    {
+        $this->resumeService->send($vacancyId, $resumeId);
 
+
+        return $this->redirectToRoute('index');
+    }
+
+    /**
+     * @Route("resume/approve/{resumeId}/{vacancyId}", name="resumeApprove", methods={"POST"})
+     * @param int $resumeId
+     * @param int $vacancyId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function approve(int $resumeId, int $vacancyId)
+    {
+      $this->resumeService->approve($resumeId);
+
+
+      return $this->redirectToRoute('showVacancy', ['id' => $vacancyId]);
+    }
+
+    /**
+     * @Route("resume/reject/{resumeId}/{vacancyId}", name="resumeReject", methods={"POST"})
+     * @param int $resumeId
+     * @param int $vacancyId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function reject(int $resumeId, int $vacancyId)
+    {
+      $this->resumeService->reject($resumeId);
+
+      return $this->redirectToRoute('showVacancy', ['id' => $vacancyId]);
+    }
 
 }

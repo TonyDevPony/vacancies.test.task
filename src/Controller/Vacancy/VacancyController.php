@@ -3,6 +3,8 @@
 namespace App\Controller\Vacancy;
 
 use App\Entity\Vacancy;
+use App\Services\ResumeService\ResumeService;
+use App\Services\ResumeStatusService\ResumeStatusService;
 use App\Services\VacancyService\VacancyServicesInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,10 +18,17 @@ class VacancyController extends AbstractController
 
     private $userRepository;
 
-    public function __construct(VacancyServicesInterface $vacancyServices, UserRepository $userRepository)
+    private $resumeService;
+
+    private $resumeStatusService;
+
+    public function __construct(VacancyServicesInterface $vacancyServices, UserRepository $userRepository,
+                                ResumeService $resumeService, ResumeStatusService $resumeStatusService)
     {
       $this->vacancyService = $vacancyServices;
       $this->userRepository = $userRepository;
+      $this->resumeService = $resumeService;
+      $this->resumeStatusService = $resumeStatusService;
     }
 
   /**
@@ -52,9 +61,17 @@ class VacancyController extends AbstractController
     public function show(int $id)
     {
       $vacancy = $this->vacancyService->getOne($id);
+      $userLogin = $this->getUser()->getUsername();
+      $userId = $this->userRepository->getUserId($userLogin);
+
+      $usersResumeList = $this->resumeService->getAll(['creatorId' => $userId]);
+      $pendingResumeList = $this->resumeStatusService->getPendingResumeList($id);
 
       return $this->render('vacancy/vacancyShow.html.twig', [
-        'vacancy' => $vacancy
+        'vacancy'           => $vacancy,
+        'resumeList'        => $usersResumeList,
+        'userLogin'         => $userLogin,
+        'pendingResumeList' => $pendingResumeList,
       ]);
     }
 

@@ -35,7 +35,7 @@ class VacancyService implements VacancyServicesInterface
    */
   public function getOne(int $id): Vacancy
   {
-    return $this->vacancyRepository->one($id);
+    return $this->vacancyRepository->one(['id' => $id]);
   }
 
   /**

@@ -46,19 +46,19 @@ class VacancyRepository extends ServiceEntityRepository implements BaseRepositor
       return $vacancies;
     }
 
-    /**
-     * @param int $id
-     * @return Vacancy
-     */
-    public function one(int $id): Vacancy
+  /**
+   * @param array $criteria
+   * @return Vacancy
+   */
+    public function one(array $criteria = []): Vacancy
     {
       /**
        * @var Vacancy $vacancy
        */
-      $vacancy = parent::findOneBy(['id' => $id]);
+      $vacancy = parent::findOneBy($criteria);
       if(!$vacancy) {
         throw new \LogicException(
-          'No vacancy found for id '.$id
+          'No vacancy found'
         );
       }
 

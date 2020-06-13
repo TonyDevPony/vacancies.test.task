@@ -46,22 +46,20 @@ class ResumeRepository extends ServiceEntityRepository implements BaseRepository
       return $resumeList;
     }
 
-    /**
-     * @param int $id
-     * @return Resume|null
-     */
-    public function one(int $id): Resume
+  /**
+   * @param array $criteria
+   * @return Resume
+   */
+    public function one(array $criteria = []): ?Resume
     {
       /**
        * @var Resume $resume
        */
-      $resume = parent::findOneBy(['resumeId' => $id]);
+      $resume = parent::findOneBy($criteria);
 
       if(!$resume)
       {
-        throw new \LogicException(
-          'No resume found for id'. $id
-        );
+        return null;
       }
 
       return $resume;
